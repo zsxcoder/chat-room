@@ -313,6 +313,11 @@ $emojis = [
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="聊天室">
+    <meta name="application-name" content="聊天室">
+    <meta name="msapplication-TileColor" content="#07C160">
+    <meta name="msapplication-config" content="public/browserconfig.xml">
+    <meta name="msapplication-TileImage" content="public/android-chrome-192x192.png">
+    <link rel="mask-icon" href="public/safari-pinned-tab.svg" color="#07C160">
     <style>
         /* 浅色模式变量 */
         :root {
@@ -755,9 +760,20 @@ $emojis = [
     </style>
 </head>
 <body>
-    <!-- 身份提示 -->
-    <div class="identity-info" id="identityInfo"></div>
-
+    <!-- PWA安装提示 -->
+    <div id="pwa-install-prompt" class="pwa-install-prompt" style="display: none; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px 20px; box-shadow: var(--shadow-medium); z-index: 9999; max-width: 400px; width: 90%;">
+        <div class="pwa-install-content" style="display: flex; align-items: center; gap: 12px;">
+            <div class="pwa-icon" style="width: 48px; height: 48px; background: var(--accent-color); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">💬</div>
+            <div class="pwa-text" style="flex: 1;">
+                <h3 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: var(--text-primary);">添加到主屏幕</h3>
+                <p style="margin: 0; font-size: 14px; color: var(--text-secondary);">将聊天室添加到主屏幕，获得更好的使用体验</p>
+            </div>
+        </div>
+        <div class="pwa-buttons" style="display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end;">
+            <button id="pwa-dismiss" style="padding: 8px 16px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">暂不</button>
+            <button id="pwa-install" style="padding: 8px 16px; border: none; border-radius: 8px; background: var(--accent-color); color: white; cursor: pointer; font-size: 14px; transition: all 0.3s ease;">添加</button>
+        </div>
+    </div>
     <!-- 自定义弹窗 DOM 结构 -->
     <div class="alert-mask" id="alertMask"></div>
     <div class="custom-alert" id="customAlert">
@@ -779,6 +795,7 @@ $emojis = [
             </div>
             <div class="header-actions">
                 <a href="admin.php" class="admin-login-btn" title="管理员登录">🔑</a>
+                <button class="theme-toggle" id="pwaInstallButton" title="添加到主屏幕">📱</button>
                 <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
             </div>
         </div>
@@ -1205,6 +1222,49 @@ document.addEventListener('DOMContentLoaded', () => {
                     .catch(function(error) {
                         console.log('ServiceWorker 注册失败:', error);
                     });
+            });
+        }
+
+        // PWA安装提示
+        let deferredPrompt;
+        const pwaPrompt = document.getElementById('pwa-install-prompt');
+        const pwaInstall = document.getElementById('pwa-install');
+        const pwaDismiss = document.getElementById('pwa-dismiss');
+        const pwaInstallButton = document.getElementById('pwaInstallButton');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (!localStorage.getItem('pwa_dismissed')) {
+                pwaPrompt.style.display = 'block';
+            }
+        });
+
+        if (pwaInstall) {
+            pwaInstall.addEventListener('click', async () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`用户选择: ${outcome}`);
+                deferredPrompt = null;
+                pwaPrompt.style.display = 'none';
+            });
+        }
+
+        if (pwaDismiss) {
+            pwaDismiss.addEventListener('click', () => {
+                pwaPrompt.style.display = 'none';
+                localStorage.setItem('pwa_dismissed', 'true');
+            });
+        }
+
+        if (pwaInstallButton) {
+            pwaInstallButton.addEventListener('click', () => {
+                if (deferredPrompt) {
+                    pwaPrompt.style.display = 'block';
+                } else {
+                    showCustomAlert('请稍后再试，PWA安装准备中...');
+                }
             });
         }
         // 主题切换功能
