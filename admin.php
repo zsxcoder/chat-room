@@ -106,51 +106,8 @@ if (!isset($_SESSION['admin_logged'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>聊天室后台管理 - 登录</title>
+    <link rel="icon" type="image/x-icon" href="public/favicon.ico">
     <style>
-        /* 浅色模式变量 */
-        :root {
-            --bg-primary: #f5f7fa;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #f8fafc;
-            --bg-input: #f8fafc;
-            --text-primary: #2c3e50;
-            --text-secondary: #34495e;
-            --text-tertiary: #7f8c8d;
-            --border-color: #e0e6ed;
-            --border-light: #eef2f7;
-            --accent-color: #07C160;
-            --accent-hover: #06b058;
-            --accent-light: #f0fbf4;
-            --error-color: #e74c3c;
-            --error-light: #fef5f5;
-            --success-color: #27ae60;
-            --success-light: #f0f9f0;
-            --shadow-light: 0 8px 32px rgba(0, 0, 0, 0.1);
-            --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.06);
-        }
-        
-        /* 深色模式变量 */
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --bg-tertiary: #3d3d3d;
-            --bg-input: #3d3d3d;
-            --text-primary: #e0e0e0;
-            --text-secondary: #b0b0b0;
-            --text-tertiary: #808080;
-            --border-color: #404040;
-            --border-light: #353535;
-            --accent-color: #07C160;
-            --accent-hover: #06b058;
-            --accent-light: #1a3a25;
-            --error-color: #e74c3c;
-            --error-light: #3a1a1a;
-            --success-color: #27ae60;
-            --success-light: #1a3a25;
-            --shadow-light: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
         * {
             margin: 0;
             padding: 0;
@@ -158,19 +115,18 @@ if (!isset($_SESSION['admin_logged'])) {
             font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
         }
         body {
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
             padding: 20px;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .login-box {
-            background: var(--bg-secondary);
+            background: #ffffff;
             padding: 40px;
             border-radius: 16px;
-            box-shadow: var(--shadow-light);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
             transition: all 0.3s ease;
@@ -181,7 +137,7 @@ if (!isset($_SESSION['admin_logged'])) {
         .login-box h2 {
             text-align: center;
             margin-bottom: 30px;
-            color: var(--text-primary);
+            color: #2c3e50;
             font-size: 24px;
             font-weight: 600;
         }
@@ -191,30 +147,29 @@ if (!isset($_SESSION['admin_logged'])) {
         .form-item label {
             display: block;
             margin-bottom: 8px;
-            color: var(--text-secondary);
+            color: #34495e;
             font-size: 14px;
             font-weight: 500;
         }
         .form-item input {
             width: 100%;
             padding: 12px 16px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #e0e6ed;
             border-radius: 8px;
             outline: none;
             font-size: 15px;
             transition: all 0.3s ease;
-            background: var(--bg-input);
-            color: var(--text-primary);
+            background: #f8fafc;
         }
         .form-item input:focus {
-            border-color: var(--accent-color);
-            background: var(--bg-secondary);
+            border-color: #07C160;
+            background: #ffffff;
             box-shadow: 0 0 0 3px rgba(7, 193, 96, 0.1);
         }
         .login-btn {
             width: 100%;
             padding: 12px;
-            background: var(--accent-color);
+            background: #07C160;
             color: white;
             border: none;
             border-radius: 8px;
@@ -225,31 +180,25 @@ if (!isset($_SESSION['admin_logged'])) {
             margin-top: 10px;
         }
         .login-btn:hover {
-            background: var(--accent-hover);
+            background: #06b058;
             transform: translateY(-2px);
         }
         .error-tip {
-            color: var(--error-color);
+            color: #e74c3c;
             text-align: center;
             margin-bottom: 20px;
             font-size: 14px;
             padding: 10px;
             border-radius: 8px;
-            background: var(--error-light);
-            border: 1px solid var(--border-color);
+            background: #fef5f5;
+            border: 1px solid #fde2e2;
         }
     </style>
 </head>
 <body>
     <div class="login-box">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2>后台管理登录</h2>
-            <button class="theme-toggle" id="themeToggle" title="切换主题" style="background: none; border: none; cursor: pointer; font-size: 20px; color: var(--text-secondary); padding: 4px; border-radius: 4px; transition: all 0.3s ease;">🌙</button>
-        </div>
+        <h2>后台管理登录</h2>
         <?php if (isset($loginError)) { echo '<div class="error-tip">'.$loginError.'</div>'; } ?>
-        <div style="text-align: center; margin-bottom: 20px;">
-            <a href="index.php" style="color: var(--accent-color); text-decoration: none; font-size: 14px;">← 回到聊天室</a>
-        </div>
         <form method="post" action="admin.php">
             <div class="form-item">
                 <label for="username">管理员账号</label>
@@ -263,62 +212,6 @@ if (!isset($_SESSION['admin_logged'])) {
         </form>
     </div>
 </body>
-    
-    <!-- 主题切换功能 -->
-    <script>
-        // 主题切换功能
-        document.addEventListener('DOMContentLoaded', function() {
-            // 从本地存储加载主题偏好
-            const savedTheme = localStorage.getItem('chat_theme') || 'light';
-            const htmlElement = document.documentElement;
-            const themeToggle = document.getElementById('themeToggle');
-            
-            // 初始化主题
-            function initTheme() {
-                if (savedTheme === 'dark') {
-                    htmlElement.setAttribute('data-theme', 'dark');
-                    if (themeToggle) themeToggle.textContent = '☀️';
-                } else {
-                    htmlElement.removeAttribute('data-theme');
-                    if (themeToggle) themeToggle.textContent = '🌙';
-                }
-            }
-            
-            // 切换主题
-            function toggleTheme() {
-                if (htmlElement.hasAttribute('data-theme')) {
-                    // 切换到浅色模式
-                    htmlElement.removeAttribute('data-theme');
-                    if (themeToggle) themeToggle.textContent = '🌙';
-                    localStorage.setItem('chat_theme', 'light');
-                } else {
-                    // 切换到深色模式
-                    htmlElement.setAttribute('data-theme', 'dark');
-                    if (themeToggle) themeToggle.textContent = '☀️';
-                    localStorage.setItem('chat_theme', 'dark');
-                }
-            }
-            
-            // 初始化主题
-            initTheme();
-            
-            // 添加主题切换事件
-            if (themeToggle) {
-                themeToggle.addEventListener('click', toggleTheme);
-            }
-            
-            // 注册Service Worker
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('service-worker.js')
-                    .then(function(registration) {
-                        console.log('ServiceWorker 注册成功:', registration.scope);
-                    })
-                    .catch(function(error) {
-                        console.log('ServiceWorker 注册失败:', error);
-                    });
-            }
-        });
-    </script>
 </html>
 <?php
     exit;
@@ -427,62 +320,8 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>聊天室后台管理系统</title>
-    <link rel="icon" href="public/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="public/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="public/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="public/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="public/favicon-16x16.png">
-    <link rel="manifest" href="public/site.webmanifest">
-    <meta name="theme-color" content="#07C160">
-    <meta name="description" content="匿名聊天室管理员面板">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="聊天室管理">
+    <link rel="icon" type="image/x-icon" href="public/favicon.ico">
     <style>
-        /* 浅色模式变量 */
-        :root {
-            --bg-primary: #f8fafc;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #f8fafc;
-            --bg-input: #f8fafc;
-            --text-primary: #2c3e50;
-            --text-secondary: #34495e;
-            --text-tertiary: #7f8c8d;
-            --border-color: #eef2f7;
-            --border-light: #f5f7fa;
-            --accent-color: #07C160;
-            --accent-hover: #06b058;
-            --accent-light: #f0fbf4;
-            --error-color: #e74c3c;
-            --error-light: #fef5f5;
-            --success-color: #27ae60;
-            --success-light: #f0f9f0;
-            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --shadow-medium: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        /* 深色模式变量 */
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --bg-tertiary: #3d3d3d;
-            --bg-input: #3d3d3d;
-            --text-primary: #e0e0e0;
-            --text-secondary: #b0b0b0;
-            --text-tertiary: #808080;
-            --border-color: #404040;
-            --border-light: #353535;
-            --accent-color: #07C160;
-            --accent-hover: #06b058;
-            --accent-light: #1a3a25;
-            --error-color: #e74c3c;
-            --error-light: #3a1a1a;
-            --success-color: #27ae60;
-            --success-light: #1a3a25;
-            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.2);
-            --shadow-medium: 0 2px 10px rgba(0, 0, 0, 0.15);
-        }
-        
         * {
             margin: 0;
             padding: 0;
@@ -490,23 +329,32 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
         }
         body {
-            background: var(--bg-primary);
+            background: #f8fafc;
             padding: 15px;
-            color: var(--text-primary);
+            color: #2c3e50;
             font-size: 14px;
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode {
+            background: #121212;
+            color: #e0e0e0;
         }
         .admin-container {
             max-width: 1200px;
             margin: 0 auto;
-            background: var(--bg-secondary);
+            background: #ffffff;
             border-radius: 16px;
-            box-shadow: var(--shadow-light);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             overflow: hidden;
             width: 100%;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        body.dark-mode .admin-container {
+            background: #1e1e1e;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
         .admin-header {
-            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+            background: linear-gradient(135deg, #07C160 0%, #06b058 100%);
             color: white;
             padding: 15px 20px;
             display: flex;
@@ -521,12 +369,17 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, var(--accent-color), #95EC69);
+            background: linear-gradient(90deg, #07C160, #95EC69);
         }
         .admin-header h2 {
             font-size: 18px;
             font-weight: 600;
             letter-spacing: 0.5px;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .logout-btn {
             color: white;
@@ -542,6 +395,34 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+            color: white;
+        }
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .chatroom-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .chatroom-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
         .admin-content {
             padding: 0 15px 15px;
         }
@@ -550,33 +431,49 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             flex-wrap: wrap;
             gap: 4px;
             padding: 15px 0 0;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #eef2f7;
+            transition: border-color 0.3s ease;
+        }
+        body.dark-mode .tab-nav {
+            border-bottom-color: #3d3d3d;
         }
         .tab-nav-item {
             padding: 10px 15px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
+            background: #f8fafc;
+            border: 1px solid #eef2f7;
             border-bottom: none;
             border-radius: 8px 8px 0 0;
             cursor: pointer;
             font-size: 13px;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: #34495e;
             transition: all 0.3s ease;
             flex-shrink: 0;
             text-decoration: none;
         }
+        body.dark-mode .tab-nav-item {
+            background: #2d2d2d;
+            border-color: #3d3d3d;
+            color: #e0e0e0;
+        }
         .tab-nav-item:hover {
-            background: var(--accent-light);
-            color: var(--accent-color);
+            background: #f0f9f0;
+            color: #07C160;
+        }
+        body.dark-mode .tab-nav-item:hover {
+            background: #1a365d;
         }
         .tab-nav-item.active {
-            background: var(--bg-secondary);
-            color: var(--accent-color);
-            border-color: var(--accent-color);
-            border-bottom-color: var(--bg-secondary);
+            background: #ffffff;
+            color: #07C160;
+            border-color: #07C160;
+            border-bottom-color: #ffffff;
             position: relative;
             z-index: 10;
+        }
+        body.dark-mode .tab-nav-item.active {
+            background: #1e1e1e;
+            border-bottom-color: #1e1e1e;
         }
         .tab-content {
             position: relative;
@@ -592,32 +489,45 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             animation: fadeIn 0.3s ease-in-out;
         }
         .tab-item {
-            border: 1px solid var(--border-color);
+            border: 1px solid #eef2f7;
             border-radius: 12px;
             overflow: hidden;
-            background: var(--bg-secondary);
+            background: #fefefe;
             transition: all 0.3s ease;
             width: 100%;
         }
+        body.dark-mode .tab-item {
+            border-color: #3d3d3d;
+            background: #2d2d2d;
+        }
         .tab-item:hover {
-            box-shadow: var(--shadow-medium);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        body.dark-mode .tab-item:hover {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
         .tab-header {
-            background: var(--bg-tertiary);
+            background: #f8fafc;
             padding: 12px 15px;
             font-size: 15px;
             font-weight: 600;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-primary);
+            border-bottom: 1px solid #eef2f7;
+            color: #2c3e50;
             display: flex;
             align-items: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode .tab-header {
+            background: #3d3d3d;
+            border-bottom-color: #4d4d4d;
+            color: #e0e0e0;
         }
         .tab-header::before {
             content: '';
             display: inline-block;
             width: 4px;
             height: 16px;
-            background: var(--accent-color);
+            background: #07C160;
             margin-right: 10px;
             border-radius: 2px;
         }
@@ -630,29 +540,40 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
         .form-group label {
             display: block;
             margin-bottom: 6px;
-            color: var(--text-secondary);
+            color: #34495e;
             font-size: 13px;
             font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .form-group label {
+            color: #e0e0e0;
         }
         .form-group input {
             padding: 8px 12px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #eef2f7;
             border-radius: 8px;
             outline: none;
             font-size: 13px;
             width: 100%;
             transition: all 0.3s ease;
-            background: var(--bg-input);
-            color: var(--text-primary);
+            background: #f8fafc;
+        }
+        body.dark-mode .form-group input {
+            border-color: #4d4d4d;
+            background: #3d3d3d;
+            color: #e0e0e0;
         }
         .form-group input:focus {
-            border-color: var(--accent-color);
-            background: var(--bg-secondary);
+            border-color: #07C160;
+            background: #ffffff;
             box-shadow: 0 0 0 3px rgba(7, 193, 96, 0.1);
+        }
+        body.dark-mode .form-group input:focus {
+            background: #4d4d4d;
         }
         .btn {
             padding: 8px 15px;
-            background: var(--accent-color);
+            background: #07C160;
             color: white;
             border: none;
             border-radius: 8px;
@@ -666,12 +587,12 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             gap: 6px;
         }
         .btn:hover {
-            background: var(--accent-hover);
+            background: #06b058;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(7, 193, 96, 0.2);
         }
         .btn-danger {
-            background: var(--error-color);
+            background: #e74c3c;
         }
         .btn-danger:hover {
             background: #c0392b;
@@ -683,37 +604,43 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             white-space: nowrap;
         }
         .btn-success {
-            background: var(--success-color);
+            background: #2ecc71;
         }
         .btn-success:hover {
             background: #27ae60;
             box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
         }
         .btn-default {
-            background: var(--text-tertiary);
+            background: #95a5a6;
         }
         .btn-default:hover {
             background: #7f8c8d;
             box-shadow: 0 4px 12px rgba(149, 165, 166, 0.2);
         }
         .tip-success {
-            color: var(--success-color);
+            color: #27ae60;
             margin-bottom: 15px;
             font-size: 13px;
             padding: 10px 12px;
             border-radius: 8px;
-            background: var(--success-light);
-            border: 1px solid var(--border-color);
+            background: #f0f9f0;
+            border: 1px solid #d4f0d4;
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: all 0.3s ease;
+        }
+        body.dark-mode .tip-success {
+            background: #1b2e1f;
+            border-color: #2e7d32;
+            color: #4caf50;
         }
         .tip-success::before {
             content: '✓';
             display: inline-block;
             width: 18px;
             height: 18px;
-            background: var(--success-color);
+            background: #27ae60;
             color: white;
             border-radius: 50%;
             text-align: center;
@@ -721,23 +648,29 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             font-size: 11px;
         }
         .tip-error {
-            color: var(--error-color);
+            color: #e74c3c;
             margin-bottom: 15px;
             font-size: 13px;
             padding: 10px 12px;
             border-radius: 8px;
-            background: var(--error-light);
-            border: 1px solid var(--border-color);
+            background: #fef5f5;
+            border: 1px solid #fde2e2;
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: all 0.3s ease;
+        }
+        body.dark-mode .tip-error {
+            background: #2e1b1b;
+            border-color: #7d2e2e;
+            color: #f44336;
         }
         .tip-error::before {
             content: '×';
             display: inline-block;
             width: 18px;
             height: 18px;
-            background: var(--error-color);
+            background: #e74c3c;
             color: white;
             border-radius: 50%;
             text-align: center;
@@ -745,58 +678,84 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             font-size: 11px;
         }
         .table-search-wrapper {
-            background: var(--bg-tertiary);
+            background: #f8fafc;
             border-radius: 12px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #eef2f7;
             padding: 18px 20px;
             margin-bottom: 20px;
             transition: all 0.3s ease;
         }
+        body.dark-mode .table-search-wrapper {
+            background: #2d2d2d;
+            border-color: #3d3d3d;
+        }
         .table-search-wrapper:hover {
-            box-shadow: var(--shadow-medium);
-            border-color: var(--accent-light);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border-color: #d1e7dd;
+        }
+        body.dark-mode .table-search-wrapper:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-color: #1a365d;
         }
         .search-title {
             font-size: 14px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: #2c3e50;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 6px;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .search-title {
+            color: #e0e0e0;
         }
         .search-title::after {
             content: '';
             width: 6px;
             height: 6px;
-            background: var(--accent-color);
+            background: #07C160;
             border-radius: 50%;
         }
         .empty-tip {
-            color: var(--text-tertiary);
+            color: #7f8c8d;
             font-size: 13px;
             padding: 30px 20px;
             border-radius: 12px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
+            background: #f8fafc;
+            border: 1px solid #eef2f7;
             text-align: center;
             margin: 10px 0;
             transition: all 0.3s ease;
         }
+        body.dark-mode .empty-tip {
+            background: #2d2d2d;
+            border-color: #3d3d3d;
+            color: #999;
+        }
         .empty-tip:hover {
-            box-shadow: var(--shadow-medium);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        body.dark-mode .empty-tip:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         .table-wrapper {
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             border-radius: 12px;
-            box-shadow: var(--shadow-medium);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             margin: 10px 0 20px;
             transition: all 0.3s ease;
         }
+        body.dark-mode .table-wrapper {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
         .table-wrapper:hover {
-            box-shadow: var(--shadow-light);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        body.dark-mode .table-wrapper:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
         .data-table {
             width: 100%;
@@ -806,32 +765,51 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             overflow: hidden;
         }
         .data-table thead {
-            background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--accent-light) 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #f0f9f0 100%);
+        }
+        body.dark-mode .data-table thead {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a365d 100%);
         }
         .data-table th {
             padding: 12px 15px;
             text-align: left;
             font-size: 13px;
             font-weight: 600;
-            color: var(--text-primary);
-            border-bottom: 1px solid var(--border-color);
+            color: #2c3e50;
+            border-bottom: 1px solid #eef2f7;
             white-space: nowrap;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        body.dark-mode .data-table th {
+            color: #e0e0e0;
+            border-bottom-color: #3d3d3d;
         }
         .data-table td {
             padding: 12px 15px;
             text-align: left;
             font-size: 12px;
-            color: var(--text-primary);
-            border-bottom: 1px solid var(--border-color);
+            color: #34495e;
+            border-bottom: 1px solid #f5f7fa;
             white-space: nowrap;
-            transition: all 0.2s ease;
+            transition: all 0.2s ease, color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        body.dark-mode .data-table td {
+            color: #e0e0e0;
+            border-bottom-color: #3d3d3d;
         }
         .data-table tbody tr {
-            background: var(--bg-secondary);
+            background: #ffffff;
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .data-table tbody tr {
+            background: #2d2d2d;
         }
         .data-table tbody tr:hover {
-            background: var(--bg-tertiary);
+            background: #f8fafc;
             transform: translateX(2px);
+        }
+        body.dark-mode .data-table tbody tr:hover {
+            background: #3d3d3d;
         }
         .data-table tbody tr:last-child td {
             border-bottom: none;
@@ -844,12 +822,20 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             white-space: nowrap;
         }
         .status-normal {
-            background: var(--success-light);
-            color: var(--success-color);
+            background: #d1e7dd;
+            color: #27ae60;
+        }
+        body.dark-mode .status-normal {
+            background: #1b2e1f;
+            color: #4caf50;
         }
         .status-ban {
-            background: var(--error-light);
-            color: var(--error-color);
+            background: #f8d7da;
+            color: #e74c3c;
+        }
+        body.dark-mode .status-ban {
+            background: #2e1b1b;
+            color: #f44336;
         }
         .msg-type-tag {
             display: inline-block;
@@ -860,24 +846,40 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             white-space: nowrap;
         }
         .msg-type-text {
-            background: var(--success-light);
-            color: var(--success-color);
+            background: #d1e7dd;
+            color: #27ae60;
+        }
+        body.dark-mode .msg-type-text {
+            background: #1b2e1f;
+            color: #4caf50;
         }
         .msg-type-image {
-            background: rgba(52, 152, 219, 0.1);
+            background: #cce5ff;
             color: #3498db;
         }
+        body.dark-mode .msg-type-image {
+            background: #1b232e;
+            color: #2196f3;
+        }
         .msg-type-video {
-            background: rgba(230, 126, 34, 0.1);
+            background: #fff3cd;
             color: #e67e22;
+        }
+        body.dark-mode .msg-type-video {
+            background: #2e251b;
+            color: #ff9800;
         }
         .avatar-color {
             width: 20px;
             height: 20px;
             border-radius: 6px;
             display: inline-block;
-            box-shadow: var(--shadow-medium);
-            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eef2f7;
+        }
+        body.dark-mode .avatar-color {
+            border-color: #3d3d3d;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         .preview-link {
             color: #3498db;
@@ -886,9 +888,15 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             font-weight: 500;
             transition: all 0.3s ease;
         }
+        body.dark-mode .preview-link {
+            color: #2196f3;
+        }
         .preview-link:hover {
             color: #2980b9;
             text-decoration: underline;
+        }
+        body.dark-mode .preview-link:hover {
+            color: #1976d2;
         }
         .pagination {
             display: flex;
@@ -901,39 +909,57 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
         }
         .pagination a {
             padding: 8px 12px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #eef2f7;
             border-radius: 8px;
-            color: var(--text-primary);
+            color: #34495e;
             text-decoration: none;
             font-size: 12px;
             font-weight: 500;
             transition: all 0.3s ease;
             white-space: nowrap;
-            background: var(--bg-secondary);
+            background: #ffffff;
+        }
+        body.dark-mode .pagination a {
+            border-color: #3d3d3d;
+            color: #e0e0e0;
+            background: #2d2d2d;
         }
         .pagination a:hover {
-            background: var(--accent-light);
-            border-color: var(--accent-color);
-            color: var(--accent-color);
+            background: #f0f9f0;
+            border-color: #07C160;
+            color: #07C160;
             transform: translateY(-2px);
         }
+        body.dark-mode .pagination a:hover {
+            background: #1a365d;
+        }
         .pagination a.active {
-            background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+            background: linear-gradient(135deg, #07C160, #06b058);
             color: white;
-            border-color: var(--accent-color);
+            border-color: #07C160;
             box-shadow: 0 2px 8px rgba(7, 193, 96, 0.2);
         }
         .pagination a.disabled {
-            color: var(--text-tertiary);
-            border-color: var(--border-color);
+            color: #bdc3c7;
+            border-color: #eef2f7;
             cursor: not-allowed;
-            background: var(--bg-tertiary);
+            background: #f8fafc;
+        }
+        body.dark-mode .pagination a.disabled {
+            color: #666;
+            border-color: #3d3d3d;
+            background: #2d2d2d;
         }
         .pagination a.disabled:hover {
-            color: var(--text-tertiary);
-            border-color: var(--border-color);
-            background: var(--bg-tertiary);
+            color: #bdc3c7;
+            border-color: #eef2f7;
+            background: #f8fafc;
             transform: none;
+        }
+        body.dark-mode .pagination a.disabled:hover {
+            color: #666;
+            border-color: #3d3d3d;
+            background: #2d2d2d;
         }
         .clear-wrapper {
             display: flex;
@@ -945,16 +971,25 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--bg-tertiary);
+            background: #f8fafc;
             padding: 18px 20px;
             border-radius: 12px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #eef2f7;
             transition: all 0.3s ease;
         }
+        body.dark-mode .clear-item {
+            background: #2d2d2d;
+            border-color: #3d3d3d;
+        }
         .clear-item:hover {
-            box-shadow: var(--shadow-medium);
-            border-color: var(--accent-light);
-            background: var(--accent-light);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border-color: #d1e7dd;
+            background: #f0f9f0;
+        }
+        body.dark-mode .clear-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-color: #1a365d;
+            background: #1a365d;
         }
         .clear-info {
             display: flex;
@@ -964,12 +999,20 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
         .clear-title {
             font-size: 15px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: #2c3e50;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .clear-title {
+            color: #e0e0e0;
         }
         .clear-desc {
             font-size: 12px;
-            color: var(--text-tertiary);
+            color: #7f8c8d;
             line-height: 1.4;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .clear-desc {
+            color: #999;
         }
         .clear-btn-wrap {
             flex-shrink: 0;
@@ -995,16 +1038,25 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             transform: translateY(-2px);
         }
         .limit-wrapper {
-            background: var(--bg-tertiary);
+            background: #f8fafc;
             border-radius: 12px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #eef2f7;
             padding: 20px;
             transition: all 0.3s ease;
         }
+        body.dark-mode .limit-wrapper {
+            background: #2d2d2d;
+            border-color: #3d3d3d;
+        }
         .limit-wrapper:hover {
-            box-shadow: var(--shadow-medium);
-            border-color: var(--accent-light);
-            background: var(--accent-light);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border-color: #d1e7dd;
+            background: #f0f9f0;
+        }
+        body.dark-mode .limit-wrapper:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-color: #1a365d;
+            background: #1a365d;
         }
         .limit-form-item {
             margin-bottom: 20px;
@@ -1015,41 +1067,55 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
         .limit-label {
             font-size: 14px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: #2c3e50;
             display: flex;
             align-items: center;
             gap: 6px;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .limit-label {
+            color: #e0e0e0;
         }
         .limit-label::after {
             content: '';
             display: inline-block;
             width: 6px;
             height: 6px;
-            background: var(--accent-color);
+            background: #07C160;
             border-radius: 50%;
         }
         .limit-input {
             padding: 10px 15px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #eef2f7;
             border-radius: 8px;
             outline: none;
             font-size: 14px;
-            background: var(--bg-input);
-            color: var(--text-primary);
+            background: #ffffff;
             transition: all 0.3s ease;
             width: 100%;
             max-width: 300px;
         }
+        body.dark-mode .limit-input {
+            border-color: #4d4d4d;
+            background: #3d3d3d;
+            color: #e0e0e0;
+        }
         .limit-input:focus {
-            border-color: var(--accent-color);
+            border-color: #07C160;
             box-shadow: 0 0 0 3px rgba(7, 193, 96, 0.1);
-            background: var(--bg-secondary);
+        }
+        body.dark-mode .limit-input:focus {
+            background: #4d4d4d;
         }
         .limit-desc {
             font-size: 12px;
-            color: var(--text-tertiary);
+            color: #7f8c8d;
             margin-top: -5px;
             line-height: 1.4;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .limit-desc {
+            color: #999;
         }
         .switch-group {
             display: flex;
@@ -1061,14 +1127,17 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             appearance: none;
             width: 40px;
             height: 20px;
-            background: var(--border-color);
+            background: #eef2f7;
             border-radius: 10px;
             position: relative;
             cursor: pointer;
             transition: all 0.3s ease;
         }
+        body.dark-mode .switch-checkbox {
+            background: #3d3d3d;
+        }
         .switch-checkbox:checked {
-            background: var(--accent-color);
+            background: #07C160;
         }
         .switch-checkbox::after {
             content: '';
@@ -1087,9 +1156,13 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
         }
         .switch-label {
             font-size: 14px;
-            color: var(--text-primary);
+            color: #34495e;
             font-weight: 500;
             cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .switch-label {
+            color: #e0e0e0;
         }
         .limit-submit-btn {
             background: linear-gradient(135deg, #07C160, #06b058);
@@ -1130,6 +1203,10 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             overflow: auto;
             position: relative;
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .media-preview-box {
+            background: #2d2d2d;
         }
         .preview-close-btn {
             position: absolute;
@@ -1158,6 +1235,10 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             color: #2c3e50;
             font-size: 16px;
             font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .preview-title {
+            color: #e0e0e0;
         }
         .preview-content {
             display: flex;
@@ -1177,23 +1258,6 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
                 opacity: 1;
             }
         }
-        
-        /* 滚动条样式 */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-tertiary);
-        }
     </style>
 </head>
 <body>
@@ -1201,10 +1265,10 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
         <div class="admin-header">
             <h2>匿名聊天室后台管理系统</h2>
             <div class="header-actions">
-            <a href="index.php" class="logout-btn">回到聊天室</a>
-            <button class="theme-toggle" id="themeToggle" title="切换主题" style="background: rgba(255, 255, 255, 0.2); border: none; cursor: pointer; font-size: 20px; color: white; padding: 6px 10px; border-radius: 8px; transition: all 0.3s ease; margin: 0 8px;">🌙</button>
-            <a href="admin.php?action=logout" class="logout-btn">安全登出</a>
-        </div>
+                <a href="index.php" class="chatroom-btn">返回聊天室</a>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                <a href="admin.php?action=logout" class="logout-btn">安全登出</a>
+            </div>
         </div>
         <div class="admin-content">
             <?php if (isset($operateMsg)) { echo '<div class="tip-success">'.$operateMsg.'</div>'; } ?>
@@ -1469,6 +1533,27 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
     </div>
 
     <script>
+        // 深色模式切换
+        function initDarkMode() {
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            // 检查本地存储中的主题设置
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                body.classList.add('dark-mode');
+                themeToggle.textContent = '☀️';
+            }
+            
+            // 主题切换事件
+            themeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                const isDarkMode = body.classList.contains('dark-mode');
+                themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+                localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            });
+        }
+
         // 选项卡切换逻辑
         const tabNavItems = document.querySelectorAll('.tab-nav-item');
         const tabContentItems = document.querySelectorAll('.tab-content-item');
@@ -1526,56 +1611,18 @@ $showSuccessTip = isset($_GET['success']) && $_GET['success'] == 1;
             }
         });
 
+
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && mediaPreviewMask.classList.contains('show')) {
                 mediaPreviewMask.classList.remove('show');
             }
-        });}
-    </script>
-    
-    <!-- 主题切换功能 -->
-    <script>
-        // 主题切换功能
+        });
+
+        // 初始化深色模式
         document.addEventListener('DOMContentLoaded', function() {
-            // 从本地存储加载主题偏好
-            const savedTheme = localStorage.getItem('chat_theme') || 'light';
-            const htmlElement = document.documentElement;
-            const themeToggle = document.getElementById('themeToggle');
-            
-            // 初始化主题
-            function initTheme() {
-                if (savedTheme === 'dark') {
-                    htmlElement.setAttribute('data-theme', 'dark');
-                    if (themeToggle) themeToggle.textContent = '☀️';
-                } else {
-                    htmlElement.removeAttribute('data-theme');
-                    if (themeToggle) themeToggle.textContent = '🌙';
-                }
-            }
-            
-            // 切换主题
-            function toggleTheme() {
-                if (htmlElement.hasAttribute('data-theme')) {
-                    // 切换到浅色模式
-                    htmlElement.removeAttribute('data-theme');
-                    if (themeToggle) themeToggle.textContent = '🌙';
-                    localStorage.setItem('chat_theme', 'light');
-                } else {
-                    // 切换到深色模式
-                    htmlElement.setAttribute('data-theme', 'dark');
-                    if (themeToggle) themeToggle.textContent = '☀️';
-                    localStorage.setItem('chat_theme', 'dark');
-                }
-            }
-            
-            // 初始化主题
-            initTheme();
-            
-            // 添加主题切换事件
-            if (themeToggle) {
-                themeToggle.addEventListener('click', toggleTheme);
-            }
+            initDarkMode();
         });
     </script>
+
 </body>
 </html>

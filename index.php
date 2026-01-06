@@ -12,53 +12,33 @@ function generateUserIdentity() {
         $colors[] = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }
     
-    // 中文字符集
-    $chineseChars = [
-        '快', '乐', '神', '秘', '活', '泼', '安', '静', '聪', '明',
-        '勇', '敢', '机', '智', '阳', '光', '优', '雅', '幽', '默',
-        '沉', '稳', '热', '情', '熊', '猫', '狮', '子', '兔', '子',
-        '猫', '咪', '狗', '狗', '老', '虎', '海', '豚', '考', '拉',
-        '大', '象', '猴', '子', '企', '鹅', '小', '鸟', '花', '草',
-        '树', '木', '山', '水', '日', '月', '星', '辰', '风', '云'
-    ];
+    $adjectives = array_unique([
+        '快乐', '神秘', '活泼', '安静', '聪明', '勇敢', 
+        '机智', '阳光', '优雅', '幽默', '沉稳', '热情'
+    ]);
+    $adjectives = array_values($adjectives);
     
-    // 英文字符集（大小写）
-    $englishChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    $nouns = array_unique([
+        '熊猫', '狮子', '兔子', '猫咪', '狗狗', '老虎',
+        '海豚', '考拉', '大象', '猴子', '企鹅', '小鸟'
+    ]);
+    $nouns = array_values($nouns);
     
-    // 数字字符集
-    $numberChars = '0123456789';
+    $colorCount = count($colors);
+    $adjCount = count($adjectives);
+    $nounCount = count($nouns);
     
-    // 随机生成用户名长度（2-10个字符）
-    $nameLength = mt_rand(2, 10);
-    
-    // 生成用户名
-    $name = '';
-    for ($i = 0; $i < $nameLength; $i++) {
-        // 随机选择字符类型
-        $charType = mt_rand(1, 3);
-        
-        switch ($charType) {
-            case 1:
-                // 中文字符
-                $name .= $chineseChars[mt_rand(0, count($chineseChars) - 1)];
-                break;
-            case 2:
-                // 英文字符
-                $name .= $englishChars[mt_rand(0, strlen($englishChars) - 1)];
-                break;
-            case 3:
-                // 数字字符
-                $name .= $numberChars[mt_rand(0, strlen($numberChars) - 1)];
-                break;
-        }
-    }
+    $colorIndex = $colorCount > 0 ? mt_rand(0, $colorCount - 1) : 0;
+    $adjIndex = $adjCount > 0 ? mt_rand(0, $adjCount - 1) : 0;
+    $nounIndex = $nounCount > 0 ? mt_rand(0, $nounCount - 1) : 0;
+    $number = mt_rand(100, 99999);
     
     $sessionId = session_id();
     $userId = md5($sessionId . microtime(true) . mt_rand(10000, 99999));
     
     return [
-        'color' => $colors[mt_rand(0, count($colors) - 1)] ?? '#333333',
-        'name' => $name,
+        'color' => $colors[$colorIndex] ?? '#333333',
+        'name' => $adjectives[$adjIndex] . $nouns[$nounIndex] . $number,
         'id' => 'user_' . substr($userId, 0, 16)
     ];
 }
@@ -300,65 +280,10 @@ $emojis = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>匿名聊天室</title>
-    <!-- Fancybox CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.css">
-    <link rel="icon" href="public/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="public/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="public/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="public/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="public/favicon-16x16.png">
-    <link rel="manifest" href="public/site.webmanifest">
-    <meta name="theme-color" content="#07C160">
-    <meta name="description" content="一个简单的匿名聊天室">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="聊天室">
-    <meta name="application-name" content="聊天室">
-    <meta name="msapplication-TileColor" content="#07C160">
-    <meta name="msapplication-config" content="public/browserconfig.xml">
-    <meta name="msapplication-TileImage" content="public/android-chrome-192x192.png">
-    <link rel="mask-icon" href="public/safari-pinned-tab.svg" color="#07C160">
+    <link rel="icon" type="image/x-icon" href="public/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css">
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
     <style>
-        /* 浅色模式变量 */
-        :root {
-            --bg-primary: #F2F2F2;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #f8f8f8;
-            --bg-input: #f8f8f8;
-            --text-primary: #333333;
-            --text-secondary: #666666;
-            --text-tertiary: #999999;
-            --border-color: #eaeaea;
-            --border-light: #f5f5f5;
-            --accent-color: #07C160;
-            --accent-hover: #06b058;
-            --accent-light: #f0fbf4;
-            --message-self: #95EC69;
-            --message-other: #ffffff;
-            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.03);
-            --shadow-medium: 0 2px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* 深色模式变量 */
-        [data-theme="dark"] {
-            --bg-primary: #1a1a1a;
-            --bg-secondary: #2d2d2d;
-            --bg-tertiary: #3d3d3d;
-            --bg-input: #3d3d3d;
-            --text-primary: #e0e0e0;
-            --text-secondary: #b0b0b0;
-            --text-tertiary: #808080;
-            --border-color: #404040;
-            --border-light: #353535;
-            --accent-color: #07C160;
-            --accent-hover: #06b058;
-            --accent-light: #1a3a25;
-            --message-self: #1e3a25;
-            --message-other: #2d2d2d;
-            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.3);
-            --shadow-medium: 0 2px 20px rgba(0, 0, 0, 0.5);
-        }
-        
         * {
             margin: 0;
             padding: 0;
@@ -366,10 +291,14 @@ $emojis = [
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            background: #F2F2F2;
+            color: #333;
             height: 100vh;
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode {
+            background: #121212;
+            color: #e0e0e0;
         }
         .chat-container {
             display: flex;
@@ -377,27 +306,40 @@ $emojis = [
             height: 100vh;
             max-width: 800px;
             margin: 0 auto;
-            background: var(--bg-secondary);
+            background: white;
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .chat-container {
+            background: #1e1e1e;
         }
         .header {
-            background: var(--bg-secondary);
+            background: #ffffff;
             padding: 12px 15px;
             display: flex;
             align-items: center;
             gap: 12px;
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: var(--shadow-light);
+            border-bottom: 1px solid #eaeaea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
             position: relative;
             z-index: 10;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        body.dark-mode .header {
+            background: #2d2d2d;
+            border-bottom-color: #3d3d3d;
         }
         .header-icon {
             width: 36px;
             height: 36px;
             border-radius: 8px;
-            background: var(--accent-light);
+            background: #f0fbf4;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .header-icon {
+            background: #1a365d;
         }
         .group-info {
             flex: 1;
@@ -408,24 +350,36 @@ $emojis = [
         .group-name {
             font-size: 17px;
             font-weight: 600;
-            color: var(--text-primary);
+            color: #333333;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .group-name {
+            color: #e0e0e0;
         }
         .group-desc {
             font-size: 12px;
-            color: var(--text-tertiary);
+            color: #999999;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .group-desc {
+            color: #999999;
         }
         .chat-content {
             flex: 1;
             overflow-y: auto;
             padding: 10px;
-            background: var(--bg-primary);
+            background: #f5f5f5;
             padding-bottom: 80px;
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .chat-content {
+            background: #1e1e1e;
         }
         .message {
             display: flex;
@@ -456,22 +410,38 @@ $emojis = [
         }
         .username {
             font-size: 12px;
-            color: var(--text-secondary);
+            color: #666;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .username {
+            color: #999;
         }
         .message-time {
             font-size: 10px;
-            color: var(--text-tertiary);
+            color: #999;
             margin-left: 8px;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .message-time {
+            color: #666;
         }
         .message-bubble {
-            background: var(--message-other);
+            background: white;
             border-radius: 4px;
             padding: 8px 12px;
             position: relative;
             word-break: break-word;
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .message-bubble {
+            background: #2d2d2d;
         }
         .message.self .message-bubble {
-            background: var(--message-self);
+            background: #95EC69;
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .message.self .message-bubble {
+            background: #2e7d32;
         }
         .message-bubble::before {
             content: '';
@@ -484,12 +454,20 @@ $emojis = [
         .message.other .message-bubble::before {
             left: -6px;
             border-width: 6px 6px 0 0;
-            border-color: var(--message-other) transparent transparent transparent;
+            border-color: white transparent transparent transparent;
+            transition: border-color 0.3s ease;
+        }
+        body.dark-mode .message.other .message-bubble::before {
+            border-color: #2d2d2d transparent transparent transparent;
         }
         .message.self .message-bubble::before {
             right: -6px;
             border-width: 0 6px 6px 0;
-            border-color: transparent var(--message-self) transparent transparent;
+            border-color: transparent #95EC69 transparent transparent;
+            transition: border-color 0.3s ease;
+        }
+        body.dark-mode .message.self .message-bubble::before {
+            border-color: transparent #2e7d32 transparent transparent;
         }
         .media-message {
             max-width: 100%;
@@ -500,6 +478,7 @@ $emojis = [
             max-width: 100%;
             max-height: 300px;
             border-radius: 4px;
+            cursor: pointer;
         }
         .identity-info {
             position: fixed;
@@ -511,28 +490,40 @@ $emojis = [
             border-radius: 4px;
             font-size: 12px;
             z-index: 1000;
-            transition: opacity 1s ease;
+            transition: opacity 1s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode .identity-info {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
         }
         .emoji-picker {
             position: fixed;
             bottom: 60px;
             right: 10px;
-            background: var(--bg-secondary);
+            background: white;
             border-radius: 10px;
-            box-shadow: var(--shadow-medium);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
             width: 300px;
             max-height: 400px;
             z-index: 1001;
             display: none;
             flex-direction: column;
-            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        body.dark-mode .emoji-picker {
+            background: #2d2d2d;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
         }
         .emoji-picker.show {
             display: flex;
         }
         .emoji-tabs {
             display: flex;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #eee;
+            transition: border-color 0.3s ease;
+        }
+        body.dark-mode .emoji-tabs {
+            border-bottom-color: #3d3d3d;
         }
         .emoji-tab {
             flex: 1;
@@ -542,10 +533,17 @@ $emojis = [
             border: none;
             cursor: pointer;
             font-size: 20px;
-            color: var(--text-primary);
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .emoji-tab {
+            color: #e0e0e0;
         }
         .emoji-tab.active {
-            background: var(--bg-tertiary);
+            background: #f5f5f5;
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .emoji-tab.active {
+            background: #3d3d3d;
         }
         .emoji-grid {
             display: grid;
@@ -561,14 +559,19 @@ $emojis = [
             text-align: center;
             cursor: pointer;
             border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
         .emoji-item:hover {
-            background: var(--bg-tertiary);
+            background: #f5f5f5;
+            transition: background-color 0.3s ease;
+        }
+        body.dark-mode .emoji-item:hover {
+            background: #3d3d3d;
         }
         .input-area {
-            background: var(--bg-secondary);
+            background: #ffffff;
             padding: 12px 15px;
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid #eaeaea;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -580,22 +583,35 @@ $emojis = [
             z-index: 999;
             max-width: 800px;
             margin: 0 auto;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        body.dark-mode .input-area {
+            background: #2d2d2d;
+            border-top-color: #3d3d3d;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
         }
         .message-input {
             flex: 1;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
+            background: #f8f8f8;
+            border: 1px solid #eaeaea;
             border-radius: 20px;
             padding: 12px 18px;
             font-size: 14px;
             outline: none;
             transition: all 0.3s ease;
-            color: var(--text-primary);
+        }
+        body.dark-mode .message-input {
+            background: #3d3d3d;
+            border-color: #4d4d4d;
+            color: #e0e0e0;
         }
         .message-input:focus {
-            border-color: var(--accent-color);
-            background: var(--bg-secondary);
+            border-color: #07C160;
+            background: #ffffff;
             box-shadow: 0 0 0 2px rgba(7, 193, 96, 0.1);
+        }
+        body.dark-mode .message-input:focus {
+            background: #4d4d4d;
         }
         .send-btn {
             width: 42px;
@@ -604,7 +620,7 @@ $emojis = [
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--accent-color);
+            background: #07C160;
             color: white;
             border: none;
             cursor: pointer;
@@ -613,48 +629,51 @@ $emojis = [
             box-shadow: 0 2px 6px rgba(7, 193, 96, 0.2);
         }
         .send-btn.plus {
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
+            background: #f8f8f8;
+            color: #666666;
+            border: 1px solid #eaeaea;
+        }
+        body.dark-mode .send-btn.plus {
+            background: #3d3d3d;
+            color: #e0e0e0;
+            border-color: #4d4d4d;
         }
         .send-btn:hover:not(.plus) {
-            background: var(--accent-hover);
+            background: #06b058;
             transform: scale(1.05);
         }
         #file-input {
             display: none;
         }
-        
-        /* 主题切换按钮 */
         .theme-toggle {
             background: none;
             border: none;
-            cursor: pointer;
             font-size: 20px;
-            color: var(--text-secondary);
-            padding: 4px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
         }
         .theme-toggle:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
+            background: rgba(0, 0, 0, 0.1);
         }
-        .admin-login-btn {
-            background: none;
+        body.dark-mode .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .login-btn {
+            background: #07C160;
+            color: white;
             border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 14px;
             cursor: pointer;
-            font-size: 20px;
-            color: var(--text-secondary);
-            padding: 4px;
-            border-radius: 4px;
             transition: all 0.3s ease;
-            margin-right: 8px;
             text-decoration: none;
         }
-        .admin-login-btn:hover {
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
+        .login-btn:hover {
+            background: #06b058;
+            transform: translateY(-2px);
         }
         
         /* 滚动条样式 */
@@ -663,15 +682,26 @@ $emojis = [
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
+            background: #f1f1f1;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
+            background: #c1c1c1;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-tertiary);
+            background: #a1a1a1;
+        }
+        
+        /* 深色模式滚动条 */
+        body.dark-mode ::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+        body.dark-mode ::-webkit-scrollbar-thumb {
+            background: #4d4d4d;
+        }
+        body.dark-mode ::-webkit-scrollbar-thumb:hover {
+            background: #5d5d5d;
         }
 
         /* ========== 美化自定义弹窗样式 ========== */
@@ -680,14 +710,14 @@ $emojis = [
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: var(--bg-secondary);
+            background: #ffffff;
             border-radius: 12px;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
             padding: 24px 30px;
             max-width: 400px;
             width: 90%;
             z-index: 9999; /* 最高层级，不被遮挡 */
-            border: 1px solid var(--border-color);
+            border: 1px solid #f0f0f0;
             display: none; /* 默认隐藏 */
             flex-direction: column;
             align-items: center;
@@ -705,14 +735,14 @@ $emojis = [
         }
         .alert-message {
             font-size: 16px;
-            color: var(--text-primary);
+            color: #333333;
             line-height: 1.5;
             margin-bottom: 20px;
             font-weight: 500;
         }
         .alert-close {
             padding: 8px 20px;
-            background: var(--accent-color);
+            background: #07C160;
             color: white;
             border: none;
             border-radius: 8px;
@@ -721,7 +751,7 @@ $emojis = [
             transition: background 0.3s ease;
         }
         .alert-close:hover {
-            background: var(--accent-hover);
+            background: #06b058;
         }
         /* 弹窗遮罩（可选，暗化背景） */
         .alert-mask {
@@ -760,20 +790,9 @@ $emojis = [
     </style>
 </head>
 <body>
-    <!-- PWA安装提示 -->
-    <div id="pwa-install-prompt" class="pwa-install-prompt" style="display: none; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px 20px; box-shadow: var(--shadow-medium); z-index: 9999; max-width: 400px; width: 90%;">
-        <div class="pwa-install-content" style="display: flex; align-items: center; gap: 12px;">
-            <div class="pwa-icon" style="width: 48px; height: 48px; background: var(--accent-color); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">💬</div>
-            <div class="pwa-text" style="flex: 1;">
-                <h3 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: var(--text-primary);">添加到主屏幕</h3>
-                <p style="margin: 0; font-size: 14px; color: var(--text-secondary);">将聊天室添加到主屏幕，获得更好的使用体验</p>
-            </div>
-        </div>
-        <div class="pwa-buttons" style="display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end;">
-            <button id="pwa-dismiss" style="padding: 8px 16px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); cursor: pointer; font-size: 14px; transition: all 0.3s ease;">暂不</button>
-            <button id="pwa-install" style="padding: 8px 16px; border: none; border-radius: 8px; background: var(--accent-color); color: white; cursor: pointer; font-size: 14px; transition: all 0.3s ease;">添加</button>
-        </div>
-    </div>
+    <!-- 身份提示 -->
+    <div class="identity-info" id="identityInfo"></div>
+
     <!-- 自定义弹窗 DOM 结构 -->
     <div class="alert-mask" id="alertMask"></div>
     <div class="custom-alert" id="customAlert">
@@ -794,9 +813,8 @@ $emojis = [
                 <div class="group-desc">全员在线 · 实时互动</div>
             </div>
             <div class="header-actions">
-                <a href="admin.php" class="admin-login-btn" title="管理员登录">🔑</a>
-                <button class="theme-toggle" id="pwaInstallButton" title="添加到主屏幕">📱</button>
-                <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
+                <a href="admin.php" class="login-btn">管理员登录</a>
+                <button class="theme-toggle" id="themeToggle">🌙</button>
             </div>
         </div>
         
@@ -824,6 +842,42 @@ $emojis = [
 let currentPlayingVideo = null;
 const emojiData = <?php echo json_encode($emojis, JSON_UNESCAPED_UNICODE); ?>;
 let existingMessageIds = new Set(); // 全局消息ID集合，用于去重
+
+// 深色模式切换
+function initDarkMode() {
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    
+    // 检查本地存储中的主题设置
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        body.classList.add('dark-mode');
+        themeToggle.textContent = '☀️';
+    }
+    
+    // 主题切换事件
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        const isDarkMode = body.classList.contains('dark-mode');
+        themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    });
+}
+
+// 初始化 Fancybox
+function initFancybox() {
+    // 全局事件委托，处理动态添加的图片
+    document.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG' && e.target.closest('.media-message')) {
+            e.preventDefault();
+            const src = e.target.src;
+            Fancybox.show([{
+                src: src,
+                type: 'image'
+            }]);
+        }
+    });
+}
 
 // ========== 自定义弹窗核心函数 ==========
 function showCustomAlert(message, autoClose = 3000) {
@@ -916,7 +970,7 @@ function displayMessage(message) {
     if (message.type === 'text') {
         contentHtml = `<div class="message-bubble">${message.text}</div>`;
     } else if (message.type === 'image') {
-            contentHtml = `<div class="message-bubble"><div class="media-message"><a href="${message.media_url}" data-fancybox="gallery" data-caption="图片消息"><img src="${message.media_url}" alt="图片" loading="lazy" style="cursor: pointer;"></a></div></div>`;
+        contentHtml = `<div class="message-bubble"><div class="media-message"><img src="${message.media_url}" alt="图片" loading="lazy"></div></div>`;
     } else if (message.type === 'video') {
         contentHtml = `<div class="message-bubble"><div class="media-message"><video controls preload="metadata"><source src="${message.media_url}" type="video/mp4">您的浏览器不支持视频播放</video></div></div>`;
     }
@@ -1163,6 +1217,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const userIdentity = <?php echo json_encode($_SESSION['user_identity'], JSON_UNESCAPED_UNICODE); ?>;
     showIdentityInfo();
     initEmojiPicker();
+    initDarkMode();
+    initFancybox();
     loadAllMessages();
     setInterval(loadNewMessages, 5000);
 
@@ -1207,131 +1263,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('load', scrollToLatestMessage);
     scrollToLatestMessage();
 });
-    </script>
-    
-    <!-- Fancybox JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.js"></script>
-    <script>
-        // 注册Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('service-worker.js')
-                    .then(function(registration) {
-                        console.log('ServiceWorker 注册成功:', registration.scope);
-                    })
-                    .catch(function(error) {
-                        console.log('ServiceWorker 注册失败:', error);
-                    });
-            });
-        }
-
-        // PWA安装提示
-        let deferredPrompt;
-        const pwaPrompt = document.getElementById('pwa-install-prompt');
-        const pwaInstall = document.getElementById('pwa-install');
-        const pwaDismiss = document.getElementById('pwa-dismiss');
-        const pwaInstallButton = document.getElementById('pwaInstallButton');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            if (!localStorage.getItem('pwa_dismissed')) {
-                pwaPrompt.style.display = 'block';
-            }
-        });
-
-        if (pwaInstall) {
-            pwaInstall.addEventListener('click', async () => {
-                if (!deferredPrompt) return;
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`用户选择: ${outcome}`);
-                deferredPrompt = null;
-                pwaPrompt.style.display = 'none';
-            });
-        }
-
-        if (pwaDismiss) {
-            pwaDismiss.addEventListener('click', () => {
-                pwaPrompt.style.display = 'none';
-                localStorage.setItem('pwa_dismissed', 'true');
-            });
-        }
-
-        if (pwaInstallButton) {
-            pwaInstallButton.addEventListener('click', () => {
-                if (deferredPrompt) {
-                    pwaPrompt.style.display = 'block';
-                } else {
-                    showCustomAlert('请稍后再试，PWA安装准备中...');
-                }
-            });
-        }
-        // 主题切换功能
-        document.addEventListener('DOMContentLoaded', function() {
-            // 从本地存储加载主题偏好
-            const savedTheme = localStorage.getItem('chat_theme') || 'light';
-            const htmlElement = document.documentElement;
-            const themeToggle = document.getElementById('themeToggle');
-            
-            // 初始化主题
-            function initTheme() {
-                if (savedTheme === 'dark') {
-                    htmlElement.setAttribute('data-theme', 'dark');
-                    themeToggle.textContent = '☀️';
-                } else {
-                    htmlElement.removeAttribute('data-theme');
-                    themeToggle.textContent = '🌙';
-                }
-            }
-            
-            // 切换主题
-            function toggleTheme() {
-                if (htmlElement.hasAttribute('data-theme')) {
-                    // 切换到浅色模式
-                    htmlElement.removeAttribute('data-theme');
-                    themeToggle.textContent = '🌙';
-                    localStorage.setItem('chat_theme', 'light');
-                } else {
-                    // 切换到深色模式
-                    htmlElement.setAttribute('data-theme', 'dark');
-                    themeToggle.textContent = '☀️';
-                    localStorage.setItem('chat_theme', 'dark');
-                }
-            }
-            
-            // 初始化主题
-            initTheme();
-            
-            // 添加主题切换事件
-            if (themeToggle) {
-                themeToggle.addEventListener('click', toggleTheme);
-            }
-            
-            // 初始化 Fancybox
-            Fancybox.bind("[data-fancybox]", {
-                // 配置选项
-                Thumbs: {
-                    autoStart: false
-                },
-                Toolbar: {
-                    display: {
-                        left: [],
-                        middle: [],
-                        right: [
-                            "zoomIn",
-                            "zoomOut",
-                            "toggle1to1",
-                            "rotateCCW",
-                            "rotateCW",
-                            "flipX",
-                            "flipY",
-                            "close"
-                        ]
-                    }
-                }
-            });
-        });
     </script>
 </body>
 </html>
